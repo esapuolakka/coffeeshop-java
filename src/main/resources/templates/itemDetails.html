@@ -19,6 +19,12 @@
   <body>
     <header th:replace="~{fragments/header :: header}"></header>
     <main class="container mt-5" style="min-height: calc(100vh - 158px); padding: 3rem 0.5rem">
+      <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+      </div>
+      <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+      </div>
       <div
         style="
           display: flex;
@@ -88,6 +94,11 @@
             <div style="display: flex; align-items: end; height: 100%">
               <form th:action="@{/cart/add}" method="post">
                 <input type="hidden" name="productId" th:value="${item.id}" />
+                <input
+                  type="hidden"
+                  name="redirectTo"
+                  th:value="/products/coffee-machines"
+                />
                 <button type="submit" class="btn btn-warning mt-4">
                   Add to cart
                 </button>

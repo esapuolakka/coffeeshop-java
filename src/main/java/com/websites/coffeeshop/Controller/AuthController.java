@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 // import java.util.logging.Logger;
 
 @Controller
@@ -41,7 +42,7 @@ public class AuthController {
 
   @PostMapping("/register")
   public String register(@RequestParam String username, @RequestParam String password,
-      @RequestParam String confirmPassword, Model model) {
+      @RequestParam String confirmPassword, Model model, RedirectAttributes redirectAttributes) {
     if (userService.existsByUsername(username)) {
       model.addAttribute("errorMessage", "Username is already in use.");
       return "register";
@@ -52,6 +53,7 @@ public class AuthController {
       return "register";
     }
     userService.registerUser(username, password);
+    redirectAttributes.addFlashAttribute("successMessage", "Registration successful. You can now sign in.");
     return "redirect:/login";
   }
 

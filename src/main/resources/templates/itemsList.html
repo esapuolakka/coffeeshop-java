@@ -39,6 +39,12 @@
   <body>
     <header th:replace="~{fragments/header :: header}"></header>
     <main class="container" style="min-height: calc(100vh - 158px); padding: 3rem 0.5rem;">
+      <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+      </div>
+      <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+      </div>
       <div class="row align-items-center">
         <div class="col-md-6 col-12 text-md-left align-middle">
           <div th:if="${itemsWithImageUrls.size() > 0}">
@@ -129,6 +135,11 @@
                     type="hidden"
                     name="productId"
                     th:value="${itemWithImageUrl.item.id}"
+                  />
+                  <input
+                    type="hidden"
+                    name="redirectTo"
+                    th:value="${currentPageUrl}"
                   />
                   <button
                     type="submit"

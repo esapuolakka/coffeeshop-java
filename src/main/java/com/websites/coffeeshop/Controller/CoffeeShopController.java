@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.ui.Model;
+import org.springframework.security.core.Authentication;
 import java.util.List;
 import java.util.Optional;
 // import java.util.logging.Logger;
@@ -78,8 +80,15 @@ public class CoffeeShopController {
           .toList();
       model.addAttribute("pageNumbers", pageNumbers);
     }
+    
+    String currentPageUrl = "/products/" + categoryName + (currentPage > 0 ? "?page=" + currentPage : "");
+    if (name != null) {
+      currentPageUrl += (currentPage > 0 ? "&" : "?") + "name=" + java.net.URLEncoder.encode(name, java.nio.charset.StandardCharsets.UTF_8);
+    }
+    
     model.addAttribute("page", pageItems);
     model.addAttribute("itemsWithImageUrls", pageItems.getContent());
+    model.addAttribute("currentPageUrl", currentPageUrl);
     return "itemsList";
   }
 
@@ -162,7 +171,18 @@ public class CoffeeShopController {
   }
 
   @PostMapping("/cart/add")
-  public String addToCart(@RequestParam("productId") Long productId, HttpSession session) {
+    public String addToCart(@RequestParam("productId") Long productId,
+      @RequestParam(value = "redirectTo", required = false) String redirectTo,
+      HttpSession session,
+      RedirectAttributes redirectAttributes,
+      Authentication authentication) {
+    
+    if (authentication == null || !authentication.isAuthenticated()) {
+      redirectAttributes.addFlashAttribute("errorMessage", "Please log in or register to add items to cart.");
+      String safeRedirectTarget = (redirectTo != null && redirectTo.startsWith("/")) ? redirectTo : "/products";
+      return "redirect:" + safeRedirectTarget;
+    }
+    
     Cart cart = (Cart) session.getAttribute("cart");
     if (cart == null) {
       cart = new Cart();
@@ -182,7 +202,10 @@ public class CoffeeShopController {
     session.setAttribute("totalPrice", totalPrice);
     session.setAttribute("totalPriceVIP", totalPriceVIP);
 
-    return "redirect:/products";
+    redirectAttributes.addFlashAttribute("successMessage", itemName + " added to cart.");
+
+    String safeRedirectTarget = (redirectTo != null && redirectTo.startsWith("/")) ? redirectTo : "/products";
+    return "redirect:" + safeRedirectTarget;
   }
 
   @GetMapping("/cart/remove")
