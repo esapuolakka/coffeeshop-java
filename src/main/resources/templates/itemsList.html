@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fi" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,16 +16,19 @@
         height: 350px;
         max-width: 450px;
         object-fit: cover;
-        scale: 1;
+        transform: scale(1) translateY(0);
+        transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
       }
       .card-img-top:hover {
-        transform: scale(1.1);
-        transition: transform 100ms ease-in;
+        transform: scale(1.08) translateY(-3px);
       }
 
+      .cart-image {
+        transform: scale(1) translateY(0);
+        transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
       .cart-image:hover {
-        transform: scale(1.05);
-        transition: transform 100ms ease-in;
+        transform: scale(1.05) translateY(-1px);
       }
       .cart-image:active {
         transform: scale(0.9);
@@ -40,16 +43,16 @@
         <div class="col-md-6 col-12 text-md-left align-middle">
           <div th:if="${itemsWithImageUrls.size() > 0}">
             <h1 th:text="${itemsWithImageUrls[0].item.category.name}">
-              Tuotekategoria
+              Product Category
             </h1>
           </div>
           <div th:if="${itemsWithImageUrls.size() == 0}">
-            <h1>Ei yhtään tuotetta</h1>
+            <h1>No products found</h1>
           </div>
         </div>
         <div class="col-md-6 col-12">
           <form
-            th:action="@{/tuotteet/{tuotekategoria}(tuotekategoria=${itemsWithImageUrls.size() > 0 ? itemsWithImageUrls[0].item.category.name : ''})}"
+            th:action="@{/products/{category}(category=${itemsWithImageUrls.size() > 0 ? itemsWithImageUrls[0].item.category.name : ''})}"
             method="get"
             class="input-group"
           >
@@ -57,10 +60,10 @@
               type="text"
               name="name"
               class="form-control"
-              placeholder="Hae tuotteita..."
-              aria-label="Hae tuotteita"
+              placeholder="Search products..."
+              aria-label="Search products"
             />
-            <button class="btn btn-primary" type="submit">Hae</button>
+            <button class="btn btn-primary" type="submit">Search</button>
           </form>
         </div>
       </div>
@@ -73,25 +76,25 @@
         <div class="col" th:each="itemWithImageUrl : ${itemsWithImageUrls}">
           <div class="card h-100">
             <a
-              th:href="@{/tuotteet/{tuotekategoria}/{id}(tuotekategoria=${itemWithImageUrl.item.category.name}, id=${itemWithImageUrl.item.id})}"
+              th:href="@{/products/{category}/{id}(category=${itemWithImageUrl.item.category.name}, id=${itemWithImageUrl.item.id})}"
             >
               <img
                 th:if="${itemWithImageUrl.imageUrl != null}"
                 th:src="@{${itemWithImageUrl.imageUrl}}"
                 class="card-img-top"
-                alt="Tuotekuva"
+                alt="Product image"
               />
             </a>
             <div class="card-body">
               <h5 class="card-title" th:text="${itemWithImageUrl.item.name}">
-                Tuotteen nimi
+                Product name
               </h5>
               <p
                 class="card-text"
                 th:if="${!#authorization.expression('hasRole(''VIP'')')}"
               >
                 <strong th:text="${itemWithImageUrl.item.price} + ' €'"
-                  >Hinta</strong
+                  >Price</strong
                 >
               </p>
               <p
@@ -101,12 +104,12 @@
                 <strong
                   style="text-decoration: line-through"
                   th:text="${itemWithImageUrl.item.price} + ' €'"
-                  >Hinta</strong
+                  >Price</strong
                 >
                 <span
                   th:text="${itemWithImageUrl.discountedPrice} + ' €'"
                   style="color: red; font-weight: bold"
-                  >Alehinta</span
+                  >Discounted price</span
                 >
               </p>
 
@@ -121,7 +124,7 @@
                   border-radius: 50%;
                 "
               >
-                <form th:action="@{/ostoskori/lisaa}" method="post">
+                <form th:action="@{/cart/add}" method="post">
                   <input
                     type="hidden"
                     name="productId"
@@ -159,8 +162,8 @@
           >
             <a
               class="page-link"
-              th:href="@{/tuotteet/{tuotekategoria}(tuotekategoria=${itemsWithImageUrls.size() > 0 ? itemsWithImageUrls[0].item.category.name : ''}, page=${page.number - 1})}"
-              aria-label="Edellinen"
+              th:href="@{/products/{category}(category=${itemsWithImageUrls.size() > 0 ? itemsWithImageUrls[0].item.category.name : ''}, page=${page.number - 1})}"
+              aria-label="Previous"
             >
               <span aria-hidden="true">&laquo;</span>
             </a>
@@ -173,7 +176,7 @@
           >
             <a
               class="page-link"
-              th:href="@{/tuotteet/{tuotekategoria}(tuotekategoria=${itemsWithImageUrls.size() > 0 ? itemsWithImageUrls[0].item.category.name : ''}, page=${item})}"
+              th:href="@{/products/{category}(category=${itemsWithImageUrls.size() > 0 ? itemsWithImageUrls[0].item.category.name : ''}, page=${item})}"
               th:text="${item + 1}"
               >1</a
             >
@@ -185,8 +188,8 @@
           >
             <a
               class="page-link"
-              th:href="@{/tuotteet/{tuotekategoria}(tuotekategoria=${itemsWithImageUrls.size() > 0 ? itemsWithImageUrls[0].item.category.name : ''}, page=${page.number + 1})}"
-              aria-label="Seuraava"
+              th:href="@{/products/{category}(category=${itemsWithImageUrls.size() > 0 ? itemsWithImageUrls[0].item.category.name : ''}, page=${page.number + 1})}"
+              aria-label="Next"
             >
               <span aria-hidden="true">&raquo;</span>
             </a>

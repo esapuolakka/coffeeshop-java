@@ -50,7 +50,7 @@ public class AdminController {
     return "admin";
   }
 
-  @GetMapping("/tuotteet")
+  @GetMapping("/products")
   public String allItemsList(@RequestParam(value = "categoryId", defaultValue = "1") Long categoryId, Model model,
       Pageable pageable) {
     Page<Item> items = adminService.getAllByCategory(categoryId, pageable);
@@ -68,14 +68,14 @@ public class AdminController {
     return "adminItems";
   }
 
-  @PostMapping("/tuotteet")
+  @PostMapping("/products")
   public ResponseEntity<Item> addNewItem(@ModelAttribute ItemDTO itemDTO,
       @RequestParam(value = "image", required = false) MultipartFile file) {
     Item newItem = adminService.addNewItem(itemDTO, file);
     return new ResponseEntity<>(newItem, HttpStatus.CREATED);
   }
 
-  @GetMapping("/tuotteet/{id}")
+  @GetMapping("/products/{id}")
   public String itemDetailPage(@PathVariable Long id, Model model) {
     Item item = adminService.getItemById(id);
     Long nextItem = adminService.getNextItemId(id);
@@ -96,7 +96,7 @@ public class AdminController {
     return "adminItemDetails";
   }
 
-  @GetMapping("/tuotteet/{id}/kuva")
+  @GetMapping("/products/{id}/image")
   public ResponseEntity<byte[]> viewItemImage(@PathVariable Long id) {
     Image image = adminService.getImageById(id);
     final HttpHeaders headers = new HttpHeaders();
@@ -106,7 +106,7 @@ public class AdminController {
     return new ResponseEntity<>(image.getContent(), headers, HttpStatus.OK);
   }
 
-  @PostMapping("/tuotteet/{id}")
+  @PostMapping("/products/{id}")
   public String updateItem(
       @PathVariable Long id,
       @ModelAttribute ItemDTO itemDTO,
@@ -115,29 +115,29 @@ public class AdminController {
     itemDTO.setId(id);
     adminService.updateItem(itemDTO, file);
 
-    return "redirect:/admin/tuotteet/" + id;
+    return "redirect:/admin/products/" + id;
   }
 
-  @DeleteMapping("/tuotteet/{id}/poista")
+  @DeleteMapping("/products/{id}/delete")
   public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
     adminService.deleteItem(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
-  @GetMapping("/valmistajat")
+  @GetMapping("/manufacturers")
   public String allManufacturers(Model model) {
     List<Manufacturer> manufacturers = adminService.getAllManufacturers();
     model.addAttribute("manufacturers", manufacturers);
     return "adminManufacturers";
   }
 
-  @PostMapping("/valmistajat")
+  @PostMapping("/manufacturers")
   public ResponseEntity<Manufacturer> addNewManufacturer(@ModelAttribute Manufacturer manufacturer) {
     Manufacturer newManufacturer = adminService.addManufacturer(manufacturer);
     return new ResponseEntity<>(newManufacturer, HttpStatus.CREATED);
   }
 
-  @GetMapping("/valmistajat/{id}")
+  @GetMapping("/manufacturers/{id}")
   public String manufacturerDetailPage(@PathVariable Long id, Model model) {
     Manufacturer manufacturer = adminService.getManufacturerById(id);
     List<Item> manufacturerItems = adminService.getItemsByManufacturer(id);
@@ -146,33 +146,33 @@ public class AdminController {
     return "adminManufacturerDetails";
   }
 
-  @PostMapping("/valmistajat/{id}")
+  @PostMapping("/manufacturers/{id}")
   public String updateManufacturer(@PathVariable Long id, @ModelAttribute Manufacturer manufacturer) {
     manufacturer.setId(id);
     adminService.updateManufacturer(manufacturer);
-    return "redirect:/admin/valmistajat/" + id;
+    return "redirect:/admin/manufacturers/" + id;
   }
 
-  @DeleteMapping("/valmistajat/{id}/poista")
+  @DeleteMapping("/manufacturers/{id}/delete")
   public ResponseEntity<Void> deleteManufacturer(@PathVariable Long id) {
     adminService.deleteManufacturer(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
-  @GetMapping("/toimittajat")
+  @GetMapping("/suppliers")
   public String allSuppliers(Model model) {
     List<Supplier> suppliers = adminService.getAllSuppliers();
     model.addAttribute("suppliers", suppliers);
     return "adminSuppliers";
   }
 
-  @PostMapping("/toimittajat")
+  @PostMapping("/suppliers")
   public ResponseEntity<Supplier> addNewSupplier(@ModelAttribute Supplier supplier) {
     Supplier newSupplier = adminService.addSupplier(supplier);
     return new ResponseEntity<>(newSupplier, HttpStatus.CREATED);
   }
 
-  @GetMapping("/toimittajat/{id}")
+  @GetMapping("/suppliers/{id}")
   public String supplierDetailPage(@PathVariable Long id, Model model) {
     Supplier supplier = adminService.getSupplierById(id);
     List<Item> supplierItems = adminService.getItemsBySupplier(id);
@@ -181,53 +181,53 @@ public class AdminController {
     return "adminSupplierDetails";
   }
 
-  @PostMapping("/toimittajat/{id}")
+  @PostMapping("/suppliers/{id}")
   public String updateSupplier(@PathVariable Long id, @ModelAttribute Supplier supplier) {
     supplier.setId(id);
     adminService.updateSupplier(supplier);
-    return "redirect:/admin/toimittajat/" + id;
+    return "redirect:/admin/suppliers/" + id;
   }
 
-  @DeleteMapping("/toimittajat/{id}/poista")
+  @DeleteMapping("/suppliers/{id}/delete")
   public ResponseEntity<Void> deleteSupplier(@PathVariable Long id) {
     adminService.deleteSupplier(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
-  @GetMapping("/kayttajat")
+  @GetMapping("/users")
   public String allUsers(Model model) {
     List<User> users = userService.getAllUsers();
     model.addAttribute("users", users);
     return "adminUsers";
   }
 
-  @PostMapping("/kayttajat/{id}")
+  @PostMapping("/users/{id}")
   public String saveUserRole(@PathVariable Long id, @RequestParam String role) {
     userService.updateUserRole(id, role);
-    return "redirect:/admin/kayttajat";
+    return "redirect:/admin/users";
   }
 
-  @PostMapping("/kayttajat/{id}/poista")
+  @PostMapping("/users/{id}/delete")
   public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
     try {
       userService.deleteUserById(id);
-      redirectAttributes.addFlashAttribute("successMessage", "Käyttäjä poistettu onnistuneesti.");
+      redirectAttributes.addFlashAttribute("successMessage", "User deleted successfully.");
     } catch (Exception e) {
-      redirectAttributes.addFlashAttribute("errorMessage", "Käyttäjän poistaminen epäonnistui.");
+      redirectAttributes.addFlashAttribute("errorMessage", "Failed to delete user.");
     }
-    return "redirect:/admin/kayttajat";
+    return "redirect:/admin/users";
   }
 
-  @GetMapping("/asetukset")
+  @GetMapping("/settings")
   public String showSettingsPage(Model model) {
     double discount = adminService.getDiscount().getDiscount();
     model.addAttribute("discount", discount);
     return "adminSettings";
   }
 
-  @PostMapping("/asetukset")
+  @PostMapping("/settings")
   public String saveDiscount(@RequestParam double discount) {
     adminService.updateDiscount(discount);
-    return "redirect:/admin/asetukset";
+    return "redirect:/admin/settings";
   }
 }

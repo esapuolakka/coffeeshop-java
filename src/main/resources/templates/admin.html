@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fi" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,10 +9,11 @@
     />
     <style>
       .card-img-top {
-        scale: 1;
+        transform: scale(1) translateY(0);
+        transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
       }
       .card-img-top:hover {
-        transform: scale(1.1);
+        transform: scale(1.08) translateY(-3px);
         transition: transform 100ms ease-in;
       }
       .card {
@@ -24,75 +25,75 @@
     <header th:replace="~{fragments/header :: header}"></header>
     <main class="pb-5">
       <div class="container mt-5">
-        <h1 class="display-1">Adminportal</h1>
+        <h1 class="display-1">Admin Portal</h1>
         <div class="row row-cols-1 row-cols-md-3 g-4" style="margin: 3rem 0">
           <div class="col">
             <div class="card h-100 w-75">
-              <a th:href="@{admin/tuotteet}">
+              <a th:href="@{/admin/products}">
                 <img
                   th:src="@{/images/items.png}"
                   class="card-img-top"
-                  alt="Tuotteet"
+                  alt="Products"
                 />
               </a>
               <div class="card-body">
-                <h3 class="card-title">Tuotteet</h3>
+                <h3 class="card-title">Products</h3>
               </div>
             </div>
           </div>
           <div class="col">
             <div class="card h-100 w-75">
-              <a th:href="@{admin/valmistajat}">
+              <a th:href="@{/admin/manufacturers}">
                 <img
                   th:src="@{/images/manufacturer.png}"
                   class="card-img-top"
-                  alt="Valmistajat"
+                  alt="Manufacturers"
                 />
               </a>
               <div class="card-body">
-                <h3 class="card-title">Valmistajat</h3>
+                <h3 class="card-title">Manufacturers</h3>
               </div>
             </div>
           </div>
           <div class="col">
             <div class="card h-100 w-75">
-              <a th:href="@{admin/toimittajat}">
+              <a th:href="@{/admin/suppliers}">
                 <img
                   th:src="@{/images/supplier.png}"
                   class="card-img-top"
-                  alt="Toimittajat"
+                  alt="Suppliers"
                 />
               </a>
               <div class="card-body">
-                <h3 class="card-title">Toimittajat</h3>
+                <h3 class="card-title">Suppliers</h3>
               </div>
             </div>
           </div>
           <div class="col">
             <div class="card h-100 w-75">
-              <a th:href="@{admin/kayttajat}">
+              <a th:href="@{/admin/users}">
                 <img
                   th:src="@{/images/users.png}"
                   class="card-img-top"
-                  alt="Kayttajat"
+                  alt="Users"
                 />
               </a>
               <div class="card-body">
-                <h3 class="card-title">Käyttäjät</h3>
+                <h3 class="card-title">Users</h3>
               </div>
             </div>
           </div>
           <div class="col">
             <div class="card h-100 w-75">
-              <a th:href="@{admin/asetukset}">
+              <a th:href="@{/admin/settings}">
                 <img
                   th:src="@{/images/settings.png}"
                   class="card-img-top"
-                  alt="Asetukset"
+                  alt="Settings"
                 />
               </a>
               <div class="card-body">
-                <h3 class="card-title">Asetukset</h3>
+                <h3 class="card-title">Settings</h3>
               </div>
             </div>
           </div>

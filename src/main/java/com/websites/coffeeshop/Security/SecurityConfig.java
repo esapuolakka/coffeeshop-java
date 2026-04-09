@@ -30,20 +30,22 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HttpMethod.DELETE, "/user").hasAnyRole("USER", "VIP", "ADMIN")
                 .requestMatchers(HttpMethod.POST, "/user").hasAnyRole("USER", "VIP", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/admin/kayttajat").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/admin/users/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                 .requestMatchers("/user").hasAnyRole("USER", "ADMIN", "VIP")
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/error").permitAll()
                 .requestMatchers("/login/**").permitAll()
                 .requestMatchers("/register/**").permitAll()
-                .requestMatchers("/etusivu").permitAll()
-                .requestMatchers("/tuotteet/**").permitAll()
-                .requestMatchers("/ostoskori/**").permitAll()
+                .requestMatchers("/home").permitAll()
+                .requestMatchers("/products/**").permitAll()
+                .requestMatchers("/cart/**").permitAll()
                 .requestMatchers("/images/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated())
             .rememberMe(rememberMe -> rememberMe
-                .tokenValiditySeconds(86400)  // Muistaa käyttäjän 1 päivän ajan
+                .tokenValiditySeconds(86400)  // 1 Day
                 .key("mySecretKey"))
             .formLogin(form -> form
                 .loginPage("/login")
@@ -51,7 +53,7 @@ public class SecurityConfig {
                 .permitAll())
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/etusivu")
+                .logoutSuccessUrl("/home")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID"));
         return http.build();

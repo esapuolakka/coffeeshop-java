@@ -4,7 +4,7 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="toimittaja")
+@Table(name="supplier")
 public class Supplier {
   
   @Id
@@ -12,13 +12,13 @@ public class Supplier {
   @Column(name="id")
   private Long id;
 
-  @Column(name="nimi")
+  @Column(name="name")
   private String name;
 
-  @Column(name="yhteyshenkilo")
+  @Column(name="contact_person")
   private String contactPerson;
 
-  @Column(name="yhteyshenkilon_email")
+  @Column(name="contact_person_email")
   private String contactPersonEmail;
 
   @OneToMany(mappedBy="supplier")

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fi" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,7 @@
       rel="stylesheet"
     />
     <title>
-      Admin - Valmistaja - <span th:text="${manufacturer.name}">Tuote</span>
+      Admin - Manufacturer - <span th:text="${manufacturer.name}">Product</span>
     </title>
   </head>
   <body>
@@ -27,13 +27,13 @@
         ></div>
       </div>
       <div style="border-bottom: 3px solid; padding-bottom: 2rem">
-        <h1 th:text="${manufacturer.name}">Valmistaja</h1>
+        <h1 th:text="${manufacturer.name}">Manufacturer</h1>
         <div class="row row-cols-1 row-cols-md-2 g-4" style="margin-top: 3rem">
           <div class="col">
             <div class="card-body">
               <h3 class="card-text">
                 <a th:href="${manufacturer.url}"
-                  ><strong th:text="${manufacturer.url}">Url</strong></a
+                  ><strong th:text="${manufacturer.url}">URL</strong></a
                 >
               </h3>
             </div>
@@ -46,14 +46,14 @@
             justify-content: space-between;
           "
         >
-          <a href="/admin/valmistajat" class="btn btn-primary mt-5">Takaisin</a>
+          <a href="/admin/manufacturers" class="btn btn-primary mt-5">Back</a>
           <div style="display: flex; align-items: flex-end">
             <button
               class="btn btn-warning mt-3"
               data-bs-toggle="modal"
               data-bs-target="#editModal"
             >
-              Muokkaa
+              Edit
             </button>
             <button
               class="btn btn-danger mt-3"
@@ -61,28 +61,28 @@
               data-bs-target="#deleteModal"
               style="margin-left: 1rem"
             >
-              Poista
+              Delete
             </button>
           </div>
         </div>
       </div>
       <div class="mt-5">
-        <h3>Valmistajan tuotteet:</h3>
+        <h3>Manufacturer products:</h3>
       </div>
       <table class="table table-striped mt-5">
         <thead>
           <tr>
             <th scope="col">ID</th>
-            <th scope="col">Nimi</th>
-            <th scope="col">Tuotesivu</th>
+            <th scope="col">Name</th>
+            <th scope="col">Product page</th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="item : ${manufacturerItems}">
             <th scope="row" th:text="${item.id}">1</th>
-            <td th:text="${item.name}">Tuotteen nimi</td>
+            <td th:text="${item.name}">Product name</td>
             <td>
-              <a th:href="@{/admin/tuotteet/{id}(id=${item.id})}">Avaa</a>
+              <a th:href="@{/admin/products/{id}(id=${item.id})}">Open</a>
             </td>
           </tr>
         </tbody>
@@ -99,7 +99,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="editModalLabel">
-                Muokkaa Valmistajan tietoja
+                Edit Manufacturer Details
               </h5>
               <button
                 type="button"
@@ -110,13 +110,13 @@
             </div>
             <div class="modal-body">
               <form
-                th:action="@{/admin/valmistajat/{id}(id=${manufacturer.id})}"
+                th:action="@{/admin/manufacturers/{id}(id=${manufacturer.id})}"
                 method="POST"
                 enctype="multipart/form-data"
                 onsubmit="handleEditSubmit(event, this);"
               >
                 <div class="mb-3">
-                  <label for="manufacturerName" class="form-label">Nimi</label>
+                  <label for="manufacturerName" class="form-label">Name</label>
                   <input
                     type="text"
                     class="form-control"
@@ -138,7 +138,7 @@
                   />
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">
-                  Tallenna muutokset
+                  Save changes
                 </button>
               </form>
             </div>
@@ -157,7 +157,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="deleteModalLabel">
-                Vahvista poistaminen
+                Confirm deletion
               </h5>
               <button
                 type="button"
@@ -167,7 +167,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              Haluatko varmasti poistaa valmistajan?
+              Are you sure you want to delete manufacturer?
               <strong th:text="${manufacturer.name}"></strong>?
             </div>
             <div class="modal-footer">
@@ -176,10 +176,10 @@
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Peruuta
+                Cancel
               </button>
               <form
-                th:action="@{/admin/valmistajat/{id}/poista(id=${manufacturer.id})}"
+                th:action="@{/admin/manufacturers/{id}/delete(id=${manufacturer.id})}"
                 method="post"
                 style="display: inline"
                 onsubmit="return handleDeleteSubmit(this);"
@@ -190,7 +190,7 @@
                   name="${_csrf.parameterName}"
                   value="${_csrf.token}"
                 />
-                <button type="submit" class="btn btn-danger">Poista</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
               </form>
             </div>
           </div>
@@ -213,12 +213,12 @@
               modal.hide();
               window.location.reload();
             } else {
-              alert("Muokkaaminen epäonnistui.");
+              alert("Editing failed.");
             }
           })
           .catch((error) => {
-            console.error("Virhe:", error);
-            alert("Muokkaamisessa tapahtui virhe.");
+            console.error("Error:", error);
+            alert("An error occurred while editing.");
           });
       }
     </script>
@@ -239,14 +239,14 @@
                 document.getElementById("deleteModal")
               );
               modal.hide();
-              window.location.href = "/admin/valmistajat";
+              window.location.href = "/admin/manufacturers";
             } else {
-              alert("Poistaminen epäonnistui.");
+              alert("Deletion failed.");
             }
           })
           .catch((error) => {
-            console.error("Virhe:", error);
-            alert("Poistamisessa tapahtui virhe.");
+            console.error("Error:", error);
+            alert("An error occurred while deleting.");
           });
       }
     </script>

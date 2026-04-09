@@ -4,7 +4,7 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "osasto")
+@Table(name = "category")
 public class Category {
 
   @Id
@@ -12,10 +12,10 @@ public class Category {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "nimi")
+  @Column(name = "name")
   private String name;
 
-  @Column(name = "osastoid")
+  @Column(name = "parent_category_id")
   private Long categoryId;
 
   @OneToMany(mappedBy = "category")

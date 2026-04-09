@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fi" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,58 +11,58 @@
   <body>
     <header th:replace="~{fragments/header :: header}"></header>
     <main class="container" style="min-height: calc(100vh - 158px); padding: 3rem 0;">
-      <h1>Ostoskori</h1>
+      <h1>Shopping Cart</h1>
       <table class="table">
         <thead>
           <tr>
-            <th>Tuote</th>
-            <th>Määrä</th>
-            <th>Hinta</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="item : ${cartItems}">
-            <td th:text="${item.name}">Tuotteen nimi</td>
-            <td th:text="${item.quantity}">Hinta</td>
+            <td th:text="${item.name}">Product name</td>
+            <td th:text="${item.quantity}">Quantity</td>
             <td>
               <span
                 th:if="${!#authorization.expression('hasRole(''VIP'')')}"
                 th:text="${item.price} + ' €'"
-                >Hinta</span
+                >Price</span
               >
               <span
                 th:if="${#authorization.expression('hasRole(''VIP'')')}"
                 style="color: red; font-weight: bold"
               >
-                <span th:text="${item.discountedPrice} + ' €'">Alehinta</span>
+                <span th:text="${item.discountedPrice} + ' €'">Discounted price</span>
               </span>
             </td>
             <td>
-              <a th:href="@{/ostoskori/poista(productId=${item.productId})}"
-                >Poista</a
+              <a th:href="@{/cart/remove(productId=${item.productId})}"
+                >Remove</a
               >
             </td>
           </tr>
           <tr th:if="${#lists.isEmpty(cartItems)}">
-            <td colspan="3">Ostoskori on tyhjä.</td>
+            <td colspan="3">Your cart is empty.</td>
           </tr>
         </tbody>
         <tfoot style="border-top: 2px solid">
           <tr th:if="${!#lists.isEmpty(cartItems)}">
-            <td colspan="2">Yhteensä:</td>
+            <td colspan="2">Total:</td>
             <td>
               <span
                 th:if="${!#authorization.expression('hasRole(''VIP'')')}"
                 th:text="${totalPrice} + ' €'"
-                >Yhteensä</span
+                >Total</span
               >
               <span
                 th:if="${#authorization.expression('hasRole(''VIP'')')}"
                 th:text="${totalPriceVIP} + ' €'"
                 style="color: red; font-weight: bold"
               >
-                Alehinta
+                Discounted total
               </span>
             </td>
           </tr>

@@ -28,7 +28,7 @@ public class AuthController {
   @GetMapping("/login")
   public String login(@RequestParam(value = "error", required = false) String error, Model model) {
     if (error != null) {
-      model.addAttribute("errorMessage", "Virheellinen käyttäjänimi tai salasana.");
+      model.addAttribute("errorMessage", "Invalid username or password.");
     }
     return "login";
   }
@@ -43,12 +43,12 @@ public class AuthController {
   public String register(@RequestParam String username, @RequestParam String password,
       @RequestParam String confirmPassword, Model model) {
     if (userService.existsByUsername(username)) {
-      model.addAttribute("errorMessage", "Käyttäjänimi on jo käytössä.");
+      model.addAttribute("errorMessage", "Username is already in use.");
       return "register";
     }
 
     if (!password.equals(confirmPassword)) {
-      model.addAttribute("errorMessage", "Salasanat eivät täsmää.");
+      model.addAttribute("errorMessage", "Passwords do not match.");
       return "register";
     }
     userService.registerUser(username, password);
@@ -58,8 +58,8 @@ public class AuthController {
   @GetMapping("/user")
   public String user(Model model, Authentication authentication) {
     if (authentication == null || !authentication.isAuthenticated()) {
-      model.addAttribute("errorMessage", "Kirjaudu sisään nähdäksesi tämän sivun.");
-      return "redirect:/etusivu";
+      model.addAttribute("errorMessage", "Please sign in to view this page.");
+      return "redirect:/home";
     }
     String username = authentication.getName();
     User user = userService.findByUsername(username);
@@ -80,13 +80,13 @@ public class AuthController {
     session.invalidate();
     SecurityContextHolder.clearContext();
 
-    return "redirect:/etusivu";
+    return "redirect:/home";
   }
 
   @GetMapping("/logout")
   public String logout(HttpSession session) {
     session.invalidate();
-    return "redirect:/etusivu";
+    return "redirect:/home";
   }
 
 }

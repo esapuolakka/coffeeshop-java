@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="rooli")
+@Table(name="role")
 public class Role {
 
   @Id
@@ -19,7 +19,7 @@ public class Role {
   @Column(name="id")
   private Long id;
 
-  @Column(name="rooli")
+  @Column(name="name")
   private String name;
   
   @ManyToMany(mappedBy = "roles")

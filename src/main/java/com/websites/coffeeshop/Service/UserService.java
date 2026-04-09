@@ -67,8 +67,8 @@ public class UserService {
   }
 
   public void updateUserRole(Long userId, String roleName) {
-    User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Käyttäjää ei löydy"));
-    Role role = roleRepository.findByName(roleName).orElseThrow(() -> new IllegalArgumentException("Roolia ei löydy"));
+    User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    Role role = roleRepository.findByName(roleName).orElseThrow(() -> new IllegalArgumentException("Role not found"));
 
     Set<Role> roles = user.getRoles();
 

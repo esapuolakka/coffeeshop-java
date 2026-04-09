@@ -49,12 +49,12 @@ public class CoffeeShopService {
   }
 
   public Page<ItemWithImageUrl> getAllItemsWithImageUrls(Long categoryId, Pageable pageable) {
-    String categoryPath = categoryId == 1 ? "/tuotteet/kahvilaitteet/" : "/tuotteet/kulutustuotteet/";
+    String categoryPath = categoryId == 1 ? "/products/coffee-machines/" : "/products/coffee-products/";
     Page<Item> items = getAllByCategory(categoryId, pageable);
 
     List<ItemWithImageUrl> itemsWithImageUrls = items.getContent().stream()
         .map(item -> {
-          String imageUrl = (item.getImage() != null) ? categoryPath + item.getImage().getId() + "/kuva"
+            String imageUrl = (item.getImage() != null) ? categoryPath + item.getImage().getId() + "/image"
               : "/images/No_Image_Available.png";
           BigDecimal discountedPrice = BigDecimal.valueOf(getDiscountedPrice(item.getPrice()));
           return new ItemWithImageUrl(item, imageUrl, discountedPrice);
@@ -64,12 +64,12 @@ public class CoffeeShopService {
   }
 
   public Page<ItemWithImageUrl> searchItemsWithImageUrls(Long categoryId, String name, Pageable pageable) {
-    String categoryPath = categoryId == 1 ? "/tuotteet/kahvilaitteet/" : "/tuotteet/kulutustuotteet/";
+    String categoryPath = categoryId == 1 ? "/products/coffee-machines/" : "/products/coffee-products/";
     Page<Item> items = itemRepository.findByCategoryIdAndName(categoryId, name, pageable);
 
     List<ItemWithImageUrl> itemsWithImageUrls = items.getContent().stream()
         .map(item -> {
-          String imageUrl = (item.getImage() != null) ? categoryPath + item.getImage().getId() + "/kuva"
+            String imageUrl = (item.getImage() != null) ? categoryPath + item.getImage().getId() + "/image"
               : "/images/No_Image_Available.png";
           BigDecimal discountedPrice = BigDecimal.valueOf(getDiscountedPrice(item.getPrice()));
           return new ItemWithImageUrl(item, imageUrl, discountedPrice);

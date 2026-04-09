@@ -4,7 +4,7 @@ import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="valmistaja")
+@Table(name="manufacturer")
 public class Manufacturer {
 
   @Id
@@ -12,7 +12,7 @@ public class Manufacturer {
   @Column(name="id")
   private Long id;
 
-  @Column(name="nimi")
+  @Column(name="name")
   private String name;
 
   @Column(name="url")

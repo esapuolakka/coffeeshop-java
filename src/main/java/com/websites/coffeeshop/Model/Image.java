@@ -11,7 +11,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "kuva")
+@Table(name = "image")
 public class Image {
 
   @Id
@@ -19,17 +19,17 @@ public class Image {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "nimi")
+  @Column(name = "name")
   private String name;
 
-  @Column(name = "mediatyyppi")
+  @Column(name = "media_type")
   private String mediaType;
 
-  @Column(name = "koko")
+  @Column(name = "size")
   private Long size;
 
   @Lob
-  @Column(name = "sisalto")
+  @Column(name = "content")
   @Basic(fetch = FetchType.LAZY)
   private byte[] content;
 

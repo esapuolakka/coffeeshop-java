@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fi" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,21 +7,21 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <title>Admin - Asetukset</title>
+    <title>Admin - Settings</title>
   </head>
   <body>
     <header th:replace="~{fragments/header :: header}"></header>
     <main class="container mt-5" style="min-height: calc(100vh - 158px);">
-      <a th:href="@{/admin}">Takaisin</a>
-      <h1 style="margin-top: 1rem">Aseta VIP-alennus</h1>
+      <a th:href="@{/admin}">Back</a>
+      <h1 style="margin-top: 1rem">Set VIP discount</h1>
 
       <form
-        th:action="@{/admin/asetukset}"
+        th:action="@{/admin/settings}"
         method="post"
         style="max-width: 400px"
       >
         <div class="mb-3">
-          <label for="discount" class="form-label">Alennusprosentti (%)</label>
+          <label for="discount" class="form-label">Discount percentage (%)</label>
           <input
             type="number"
             id="discount"
@@ -34,11 +34,11 @@
           />
         </div>
         <button type="submit" class="btn btn-primary" style="margin-top: 1rem">
-          Tallenna alennus
+          Save discount
         </button>
       </form>
       <h4 style="margin-top: 3rem">
-        Nykyinen alennusprosentti: <span th:text="${discount}"></span>%
+        Current discount percentage: <span th:text="${discount}"></span>%
       </h4>
     </main>
     <footer th:replace="~{fragments/footer :: footer}"></footer>

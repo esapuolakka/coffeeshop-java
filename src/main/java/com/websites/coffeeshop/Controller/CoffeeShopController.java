@@ -38,25 +38,25 @@ public class CoffeeShopController {
 
   @GetMapping("/")
   public String redirectHome() {
-    return "redirect:/etusivu";
+    return "redirect:/home";
   }
 
-  @GetMapping("/etusivu")
+  @GetMapping("/home")
   public String homepage(Model model) {
     return "index";
   }
 
-  @GetMapping("/tuotteet")
+  @GetMapping("/products")
   public String redirect() {
-    return "redirect:/tuotteet/kahvilaitteet";
+    return "redirect:/products/coffee-machines";
   }
 
-  @GetMapping("/tuotteet/{tuotekategoria}")
-  public String itemsPage(@PathVariable("tuotekategoria") String categoryName,
+  @GetMapping("/products/{category}")
+  public String itemsPage(@PathVariable("category") String categoryName,
       @RequestParam(value = "name", required = false) String name,
       @RequestParam(defaultValue = "0") Optional<Integer> page,
       Model model) {
-    Long categoryId = categoryName.equals("kahvilaitteet") ? 1L : 2L;
+    Long categoryId = categoryName.equals("coffee-machines") ? 1L : 2L;
 
     Page<ItemWithImageUrl> pageItems;
 
@@ -83,13 +83,13 @@ public class CoffeeShopController {
     return "itemsList";
   }
 
-  // @GetMapping("/tuotteet/page/{tuotekategoria}")
+  // @GetMapping("/products/page/{category}")
   // public ResponseEntity<List<ItemWithImageUrl>>
-  // showMoreItems(@PathVariable("tuotekategoria") String categoryName,
+  // showMoreItems(@PathVariable("category") String categoryName,
   // @RequestParam(value = "name", required = false) String name,
   // @RequestParam(defaultValue = "0") int page,
   // @RequestParam(defaultValue = "18") int size) {
-  // Long categoryId = categoryName.equals("kahvilaitteet") ? 1L : 2L;
+  // Long categoryId = categoryName.equals("coffee-machines") ? 1L : 2L;
   // List<ItemWithImageUrl> itemsWithImageUrls;
 
   // if (name != null) {
@@ -102,8 +102,8 @@ public class CoffeeShopController {
   // return ResponseEntity.ok(itemsWithImageUrls);
   // }
 
-  @GetMapping("/tuotteet/{tuotekategoria}/{id}")
-  public String itemDetailPage(@PathVariable String tuotekategoria, @PathVariable Long id, Model model) {
+  @GetMapping("/products/{category}/{id}")
+  public String itemDetailPage(@PathVariable String category, @PathVariable Long id, Model model) {
 
     Item item = coffeeShopService.getItemById(id);
     BigDecimal price = item.getPrice();
@@ -118,7 +118,7 @@ public class CoffeeShopController {
     return "itemDetails";
   }
 
-  @GetMapping("/tuotteet/{tuotekategoria}/{id}/kuva")
+  @GetMapping("/products/{category}/{id}/image")
   public ResponseEntity<byte[]> itemDetailImage(@PathVariable Long id) {
     Image image = coffeeShopService.getImageById(id);
     final HttpHeaders headers = new HttpHeaders();
@@ -127,7 +127,7 @@ public class CoffeeShopController {
     return new ResponseEntity<>(image.getContent(), headers, HttpStatus.OK);
   }
 
-  @GetMapping("/ostoskori")
+  @GetMapping("/cart")
   public String shoppingCart(Model model, HttpSession session) {
     Cart cart = (Cart) session.getAttribute("cart");
     if (cart == null) {
@@ -161,7 +161,7 @@ public class CoffeeShopController {
     return "shoppingCart";
   }
 
-  @PostMapping("/ostoskori/lisaa")
+  @PostMapping("/cart/add")
   public String addToCart(@RequestParam("productId") Long productId, HttpSession session) {
     Cart cart = (Cart) session.getAttribute("cart");
     if (cart == null) {
@@ -182,10 +182,10 @@ public class CoffeeShopController {
     session.setAttribute("totalPrice", totalPrice);
     session.setAttribute("totalPriceVIP", totalPriceVIP);
 
-    return "redirect:/tuotteet";
+    return "redirect:/products";
   }
 
-  @GetMapping("/ostoskori/poista")
+  @GetMapping("/cart/remove")
   public String removeFromCart(@RequestParam("productId") Long productId, HttpSession session) {
     Cart cart = (Cart) session.getAttribute("cart");
     if (cart != null) {
@@ -199,7 +199,7 @@ public class CoffeeShopController {
       session.setAttribute("totalPrice", totalPrice);
       session.setAttribute("totalPriceVIP", totalPriceVIP);
     }
-    return "redirect:/ostoskori";
+    return "redirect:/cart";
   }
 
 }

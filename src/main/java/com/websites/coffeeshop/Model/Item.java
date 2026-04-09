@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "tuote")
+@Table(name = "item")
 public class Item {
 
   @Id
@@ -13,32 +13,32 @@ public class Item {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "nimi")
+  @Column(name = "name")
   private String name;
 
-  @Column(name = "kuvaus")
+  @Column(name = "description")
   private String description;
 
-  @Column(name = "hinta")
+  @Column(name = "price")
   private BigDecimal price;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinColumn(name = "tuotekuva")
+  @JoinColumn(name = "image_id")
   private Image image;
 
-  @Column(name = "lisatty")
+  @Column(name = "created_at")
   private LocalDateTime createdAt;
 
   @ManyToOne
-  @JoinColumn(name = "osastoid", nullable = false)
+  @JoinColumn(name = "category_id", nullable = false)
   private Category category;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "toimittajaid", nullable = false)
+  @JoinColumn(name = "supplier_id", nullable = false)
   private Supplier supplier;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "valmistajaid", nullable = false)
+  @JoinColumn(name = "manufacturer_id", nullable = false)
   private Manufacturer manufacturer;
 
   public Item() {

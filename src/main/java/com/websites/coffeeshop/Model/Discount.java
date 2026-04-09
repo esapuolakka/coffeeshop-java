@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "alennus")
+@Table(name = "discount")
 public class Discount {
 
   @Id
@@ -16,7 +16,7 @@ public class Discount {
   @Column(name = "id")
   private Long id;
 
-  @Column(name = "alennusprosentti")
+  @Column(name = "discount_percentage")
   private double discount;
 
   public Discount() {
