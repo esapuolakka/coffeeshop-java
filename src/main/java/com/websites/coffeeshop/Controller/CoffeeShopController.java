@@ -122,8 +122,13 @@ public class CoffeeShopController {
       discountedPrice = BigDecimal.valueOf(coffeeShopService.getDiscountedPrice(price));
     }
 
-    model.addAttribute("item", coffeeShopService.getItemById(id));
+    String currentItemUrl = "/products/" + category + "/" + id;
+    String categoryBackUrl = "/products/" + category;
+
+    model.addAttribute("item", item);
     model.addAttribute("discountedPrice", discountedPrice);
+    model.addAttribute("currentItemUrl", currentItemUrl);
+    model.addAttribute("categoryBackUrl", categoryBackUrl);
     return "itemDetails";
   }
 
